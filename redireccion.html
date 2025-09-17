@@ -1,13 +1,39 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta http-equiv="refresh" content="0; url=https://www.instagram.com/hospy.co/">
+    <title>Redirigiendo a Instagram...</title>
     <script>
-      // Script opcional para asegurar la redirección en navegadores que no siguen la meta tag
-      window.location.replace("https://www.instagram.com/hospy.co/");
+      const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyvuhGozhC995_ztFlMal1c8FcEc0d1zELMpedCEJXUSkAMMgX-xamxKET7HkiMITGErA/exec';
+
+      function capturarUTM() {
+        const params = new URLSearchParams(window.location.search);
+        const utmSource = params.get('utm_source');
+        const utmMedium = params.get('utm_medium');
+        const utmCampaign = params.get('utm_campaign');
+        
+        // ¡Nuevo! Captura la información del navegador y dispositivo
+        const userAgent = navigator.userAgent;
+
+        if (utmSource || utmMedium || utmCampaign || userAgent) {
+          // Construye la URL para enviar los datos al script
+          const requestUrl = `${APPS_SCRIPT_URL}?utm_source=${utmSource}&utm_medium=${utmMedium}&utm_campaign=${utmCampaign}&user_agent=${encodeURIComponent(userAgent)}`;
+          
+          fetch(requestUrl, {
+            mode: 'no-cors'
+          }).catch(error => console.error('Error al enviar los datos:', error));
+        }
+      }
+
+      window.onload = function() {
+        capturarUTM();
+        setTimeout(function() {
+          window.location.replace("https://www.instagram.com/hospy.co/");
+        }, 500);
+      };
     </script>
   </head>
   <body>
+    <p>Te estamos redirigiendo a Instagram...</p>
     <p>Si no eres redirigido, haz clic <a href="https://www.instagram.com/hospy.co/">aquí</a>.</p>
   </body>
 </html>
